@@ -11,10 +11,7 @@ function createBalls(amountOfBalls) {
     for(let i = 0; i < amountOfBalls; i++) {
         balls.push(new Ball());
     }
-    console.log(balls);
-    
-
-    
+    console.log(balls);  
 }
 
 function drawBalls() {
@@ -31,7 +28,8 @@ function drawBalls() {
             ball.radius,
             0,
             Math.PI * 2);
-    ctx.stroke();
+    ctx.fillStyle = ball.color;
+    ctx.fill();
     moveBall(ball);
     }
     )
@@ -39,36 +37,38 @@ function drawBalls() {
 
     }
     function moveBall(ball) {
-        let goingRight = true;
-        let goingDown = true;
-        if(ball.startingPointX === windowWidth || !goingRight) {
-            goingRight = false;
-            ball.startingPointX -= 1;
+        if(ball.startingPointX >= windowWidth - ball.radius - ball.velocity) {
+            ball.goingRight = false;
         }
-        else {
-            ball.startingPointX += 1;
+        if(ball.startingPointX <= 0 + ball.radius + ball.velocity) {
+            ball.goingRight = true;
         }
-        if(ball.startingPointY === windowHeight || !goingDown) {
-            goingDown = false;
-            ball.startingPointY -= 1;
+        if(ball.startingPointY <= 0 + ball.radius + ball.velocity) {
+            ball.goingDown = false;
         }
-        else {
-            ball.startingPointY += 1;
+        if(ball.startingPointY >= windowHeight - ball.radius - ball.velocity) {
+            ball.goingDown = true;
         }
-    
-        
-        
+        if(ball.goingRight) {
+            ball.startingPointX += ball.velocity;
+        }
+        if(!ball.goingRight) {
+            ball.startingPointX -= ball.velocity;
+
+        }
+        if(ball.goingDown) {
+            ball.startingPointY -= ball.velocity;
+        }
+        if(!ball.goingDown) {
+            ball.startingPointY += ball.velocity;
+        }
+
     }
 
-    createBalls(5);
+    createBalls(100);
 
-    //setInterval(drawBalls, 100);
+    setInterval(drawBalls, 50);
     
-    
-    // lav et loop som kører igennem balls
-    // først tegn ballsene
-    // kald en moveBall metode, som ændrer x og y med et lille tal, så kuglen rykker
-    // kør den med et interval på 100 millisekunder eller noget i den stil
 
 
 
