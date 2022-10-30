@@ -1,41 +1,42 @@
+
 const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext("2d");
 
-const balls = [];
-
-const windowHeight = window.innerHeight;
-const windowWidth = window.innerWidth;
+let windowHeight = window.innerHeight;
+let windowWidth = window.innerWidth;
 canvas.width = windowWidth
 canvas.height = windowHeight;
+
+const balls = [];
 
 function createBalls(amountOfBalls) {
     for(let i = 0; i < amountOfBalls; i++) {
         balls.push(new Ball());
     }
-    console.log(balls);  
 }
 
 function drawBalls() {
-    if (canvas.getContext) {
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    updateCanvas();
+    
     balls.forEach(ball => {
-
+        drawBall(ball);
+    });
         
-        ctx.beginPath();
-    ctx.arc(ball.startingPointX,
-            ball.startingPointY,
-            ball.radius,
-            0,
-            Math.PI * 2);
-    ctx.fillStyle = ball.color;
-    ctx.fill();
-    moveBall(ball);
-    }
-    )
+    requestAnimationFrame(drawBalls);
     }
 
+    function drawBall(ball) {
+        ctx.beginPath();
+        ctx.arc(ball.startingPointX,
+                ball.startingPointY,
+                ball.radius,
+                0,
+                Math.PI * 2);
+                ctx.fillStyle = ball.color;
+                ctx.fill();
+                moveBall(ball);       
     }
+
     function moveBall(ball) {
         if(ball.startingPointX >= windowWidth - ball.radius - ball.velocity) {
             ball.goingRight = false;
@@ -64,10 +65,20 @@ function drawBalls() {
         }
 
     }
+    function updateCanvas() {
+        if (windowWidth != window.innerWidth || windowHeight != window.innerHeight) {
+            windowWidth = window.innerWidth;
+            windowHeight = window.innerHeight;
+            canvas.width = windowWidth;
+            canvas.height = windowHeight;
+          }
+          
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
     createBalls(100);
 
-    setInterval(drawBalls, 50);
+    drawBalls();
     
 
 
